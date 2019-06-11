@@ -1,0 +1,21 @@
+{	
+	"object":{
+		"name":"skeleton",
+		"friend":"byteface",
+		"password":""
+	},
+
+	"rules":{
+		"parameters":"False",
+		"redirect":"False"
+	},
+
+	"events":[],
+
+	"stats":{
+		"hitcount":"0",
+		"inboundrefs":[],
+		"outboundrefs":[]
+	}
+
+}

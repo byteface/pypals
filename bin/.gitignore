@@ -1,0 +1,6 @@
+/*
+
+# only allow files and folders...
+!.gitignore
+!README.md
+!skeleton/
