@@ -1,8 +1,8 @@
 #pypals
 
-ported up my first ever python project from several years back from python2 to python3 seeing as I still use it.
+ported up my first ever python project from several years back from python2 to python3
 
-command line python friends for storing and running python code scripts and snippets.
+command line python friends for storing and running python code scripts and snippets
 
 	$ python3 run.py
 	$ who are you looking for?
@@ -31,6 +31,10 @@ All clones live in the /bin . pass their name to summon. i.e...
 	$ Hello, to you mike!
 	$ I am listening...
 
+now try running this command...
+
+	$ quit
+
 Clones of are copies of '/bin/skeleton' which is empty as possible to keep any new pypals you make light. But you could change code to set your own base to clone from.
 
 I create them mostly for scraping data or organising and running tasks on projects. i.e you could have several pypals in the bin...
@@ -40,17 +44,17 @@ bin/someapp
 bin/somesideproject
 bin/somewebscraper
 
-with commands for doing various tasks. I have tons and you can eventually build up libraries and share or call commands between pypals.
+with commands for doing various tasks. I have many and you can eventually build up libraries and share or call commands between pypals.
 
 ##MORE
 You can now install loads of python libraries and do tons of stuff with them. this is just the empty loader.
 
 ##DOCUMENTATION
-README.md at each directory level.
+--
 
 ##SHORTCUTS
 r - repeats the last command
 h - history
 
 ##LICENCE
-http://www.gnu.org/licenses/gpl-2.0.html
+http://www.gnu.org/licenses/gpl-3.0.html
