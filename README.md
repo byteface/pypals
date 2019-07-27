@@ -4,9 +4,7 @@ ported up my first ever python project from several years back from python2 to p
 
 command line python friends for storing and running python code scripts and snippets
 
-	$ python3 run.py
-	$ who are you looking for?
-	$ > sportsfan
+	$ python3 run.py sportsfan
 	$ sportsfan doesn't exist, create them now? yes or no
 	$ > yes
 	$ your name?
@@ -14,7 +12,7 @@ command line python friends for storing and running python code scripts and snip
 	$ Hi my name is sportsfan, Thankyou for creating me!
 	$ I am listening...
 
-sportsfan has been created and you can see him in /bin directory. He can gather data about sports using any python commands you write and put in the commands folder
+sportsfan has been created, you can see him in /bin directory. He can gather data about sports using any python commands you write and put in the commands folder
 
 now try running this command...
 
@@ -47,7 +45,7 @@ bin/somewebscraper
 with commands for doing various tasks. I have many and you can eventually build up libraries and share or call commands between pypals.
 
 ##MORE
-You can now install loads of python libraries and do tons of stuff with them. this is just the empty loader.
+You can install loads of python libraries and do tons of stuff with them. this is just the empty loader.
 
 ##DOCUMENTATION
 --

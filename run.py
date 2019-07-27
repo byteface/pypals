@@ -1,11 +1,10 @@
 from core import PyWorld
 import sys
 
-palname=""
+palname = ""
 try:
-	palname = sys.argv[1]
+    palname = sys.argv[1]
 except Exception:
-	pass
+    pass
 
-# instantiate a world to load the requested pypal
-world = PyWorld(palname);
+world = PyWorld(palname)
