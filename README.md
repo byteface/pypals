@@ -47,12 +47,14 @@ with commands for doing various tasks. I have many and you can eventually build 
 ##MORE
 You can install loads of python libraries and do tons of stuff with them. this is just the empty loader.
 
+
 ##DOCUMENTATION
---
+cant use package names for commands. i.e. builtins
 
 ##SHORTCUTS
 r - repeats the last command
 h - history
+
 
 ##LICENCE
 http://www.gnu.org/licenses/gpl-3.0.html

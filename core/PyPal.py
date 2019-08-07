@@ -36,7 +36,7 @@ class PyPal(object):
             information = input("> ")
             self.process(information)
             self.listen()
-        except:
+        except Exception as e:
             self.nlg.log("FAIL :::::listen")
 
     def process(self, information, caller=None, callee=None):
@@ -132,9 +132,10 @@ class NLP(object):
             reload(command_module)  # reload class without restarting pypal
             return command_module.run(self.owner)
 
-        except Exception(e):
-            self.owner.nlg.say("Sorry, I tried but it didn't work")
-            self.owner.nlg.log("check your virtual environment is running?")
+        except Exception as e:
+            print( 'failed::' )
+            print( e )
+
             pass
 
     # TODO - try to find the finite verb
@@ -198,25 +199,34 @@ class NLP(object):
     # params at the moment are 'rest of string'
     # long term might break around finite verb and pass whole string?
     def runSentenceAsFunction(self, path, function, params=None):
+
+        print("runSentenceAsFunction1")
+
         sys.path.append(path)
         try:
+
             command_module = __import__(function)
             reload(command_module)  # reload class without restarting pypal
+
+            print("runSentenceAsFunction2")
 
             if(params != None):
                 return command_module.run(self.owner, params)
             else:
                 return command_module.run(self.owner)
-            pass
+            # pass
 
-        except Exception(e):
-            self.owner.nlg.log("runSentenceAsFunction FAIL!! \
-				\n happens when : \
-				\n failing code in the command. i.e imports used by the command not intalled \
-				\n venv not running \
-				\n not passing params when required")
-            return False
-            # self.owner.listen()
+            print("runSentenceAsFunction23")
+
+        except Exception as e:
+            print( 'failed::' )
+            print( e )
+    #         self.owner.nlg.log("runSentenceAsFunction FAIL!! \
+				# \n happens when : \
+				# \n failing code in the command. i.e imports used by the command not intalled \
+				# \n venv not running \
+				# \n not passing params when required")
+
         pass
 
     # run several possibilities. decide which is most relevant?
@@ -267,7 +277,7 @@ class NLP(object):
             canHasParams = program.meta.get_property('rules', 'parameters')
             return canHasParams
 
-        except:
+        except Exception as e:
             print("no meta or param found")
             # force false if passing a non command. TODO- BUT. we shouldn't be calling if the case.
             return False
