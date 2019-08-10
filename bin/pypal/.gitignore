@@ -1,0 +1,12 @@
+.DS_Store
+.Trashes
+.DS_Store?
+*.pyc
+
+# you likely don't want to store STM
+brain/short_term_memory
+
+
+body
+TODO.rtf
+urls
