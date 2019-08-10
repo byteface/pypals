@@ -2,7 +2,7 @@
 
 command line python friends for storing and running scripts and snippets
 
-	$ python3 run.py sportsfan
+	$ python3 -m pypals sportsfan
 	$ sportsfan doesn't exist, create them now? yes or no
 	$ > yes
 	$ your name?
@@ -20,7 +20,7 @@ look in bin/skeleton/brain/commands/hello/hello.py file to see an example of a c
 
 All clones live in the /bin . pass their name to summon. i.e...
 
-	$ python3 run.py sportsfan
+	$ python3 -m pypals sportsfan
 	$ mike I see you have returned!
 	$ I am listening...
 	$ hello
