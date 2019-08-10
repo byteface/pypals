@@ -4,10 +4,13 @@ import json
 
 from core.PyPal import PyPal
 
+from typing import *
+from enum import Enum
+
 
 class PyWorld:
 
-    def __init__(self, name):
+    def __init__(self, name: str):
         """
         $ python PyWorld.py - to create a new pypal
         $ python PyWorld.py pypal - to quick load a specific pypal
@@ -16,8 +19,7 @@ class PyWorld:
         name_to_find = input("> ") if not name else name
         self.get_pypal_by_name(name_to_find)
 
-
-    def get_pypal_by_name(self, name):
+    def get_pypal_by_name(self, name: str):
         pypal = "bin/%s/" % name
         if name != "" and (os.path.exists(pypal) or os.path.islink(pypal)):
             pal = PyPal({'name': name})
@@ -25,15 +27,14 @@ class PyWorld:
         else:
             self.create_new_pypal(name)
 
-
-    def create_new_pypal(self, name):
+    def create_new_pypal(self, name: str):
         pypal = "bin/%s/" % name
         print(name + " doesn't exist, create them now? yes or no")
         is_new = input("> ")
-        if(is_new == 'yes' or 'y' or 'Yes' or 'Y' ):
+        if(is_new == 'yes' or 'y' or 'Yes' or 'Y'):
             print("Your name?")
             friend = input("> ")
-           
+
             # create the new guy
             parent = "bin/skeleton"
             new_pypal = 'bin/%s' % name

@@ -1,8 +1,6 @@
-#pypals
+# pypals
 
-ported up my first ever python project from several years back from python2 to python3
-
-command line python friends for storing and running python code scripts and snippets
+command line python friends for storing and running scripts and snippets
 
 	$ python3 run.py sportsfan
 	$ sportsfan doesn't exist, create them now? yes or no
@@ -44,17 +42,34 @@ bin/somewebscraper
 
 with commands for doing various tasks. I have many and you can eventually build up libraries and share or call commands between pypals.
 
-##MORE
+## MORE
 You can install loads of python libraries and do tons of stuff with them. this is just the empty loader.
 
 
-##DOCUMENTATION
-cant use package names for commands. i.e. builtins
+## DOCUMENTATION
 
-##SHORTCUTS
+note : you can't use package names for commands. i.e. builtins, test
+
+
+### example importing one pypal into another to access its commands
+if you have several pypals and find you have some common functions. you can import them instead of copying and pasting between.
+
+    from core.PyPal import PyPal
+    pal = PyPal({'name':'pypal'})
+    common = pal.nlp.processSentence( 'common sitemap' )
+    get_site_urls = common['get_site_urls']
+
+- you will have to create a venv and install the libs to run it. it's a random script found online as example and uses beautiful soup.
+
+- check the command in bin/pypal/brain/commands/common/sitemap/common_sitemap.py to see what's needed for this one
+
+
+## SHORTCUTS 
+
 r - repeats the last command
+
 h - history
 
 
-##LICENCE
+## LICENCE
 http://www.gnu.org/licenses/gpl-3.0.html

@@ -20,14 +20,15 @@ class PyPal(object):
         self.nlp = NLP(self)
         self.nlg = NLG(self)
         # self.context=Context( [self], [self] ) # talk to self
+        # TODO - wont I need all these to not be class vars in long run so can parralelise?. this'll do for now.
+        self.memory = Memory()
 
     def introduce(self):
-        self.nlg.say("Hi my name is %s, Thankyou for creating me!" %
-                     self.o['name'])
+        self.nlg.say(f"Hi my name is {self.o['name']}, Thankyou for creating me!")
         self.listen()
 
     def welcome(self):
-        self.nlg.say("%s I see you have returned!" % self.o['friend'])
+        self.nlg.say(f"{self.o['friend']} I see you have returned!")
         self.listen()
 
     def listen(self):
@@ -46,11 +47,10 @@ class PyPal(object):
         words = information.split(None)
         if len(words) == 1:
 
-        	# helpers/shortcuts
-
-        	# show history
+            # helpers/shortcuts
+            # show history
             if information == 'h':
-                for h in history:
+                for h in self.history:
                     print(h)
                 return
 
@@ -67,15 +67,41 @@ class PyPal(object):
         self.nlp.processSentence(information)
         return
 
+
     # TODO - need to ask meaning of words. to at least put it into memory for considering
     # should also be able to check dictionary / nltk sources. but needs to build a program for the word
-    def ask_word_meaning(self, word):
-
+    def ask_word_meaning(self, word: str):
         self.nlp.say("What is '%s'?" % word)
         answer = input("> ")
-
         # TODO - NO - should probs be processess response
         self.nlp.learn_word(word, answer)
+
+
+# TODO - see if I can use inspection to get the callee so don't have to pass context. tho i think that just gets the class name? 
+#- also then you couldn't write to a different context. (inspection could set it as the default if non passed?)
+class Memory(object):
+
+    def __init__(self):
+        pass
+
+    def create(self, context=None, data=None, filename: str = "model.json"):
+        f = open(context.COMMAND_PATH + '/' + filename, "w")
+        f.write(json.dumps(data))
+        f.close()
+
+    def read(self, context=None, filename: str = "model.json"):
+        f = open(context.COMMAND_PATH + '/' + filename, "r")
+        data = json.loads(f.read())
+        return data
+
+    # def update(self, data=None, filename="model.json" ):
+    #     pass
+
+    # def delete(filename="model.json"):
+    #     pass
+
+    # def relate
+    # create binding to the memory blobs in other commands for access here?
 
 
 class Context(object):
@@ -85,7 +111,7 @@ class Context(object):
     COMMAND_PATH = ''
     # PARAMS=''
 
-    def __init__(self, parent, command, caller=None, callee=None):
+    def __init__(self, parent, command: str, caller=None, callee=None):
 
         # self.caller=caller
         # self.callee=callee
@@ -109,11 +135,11 @@ class NLP(object):
     def __init__(self, owner):
         self.owner = owner
 
-    def learn_word(self, word, answer):
+    def learn_word(self, word: str, answer: str):
         # TODO - learn_word. store what friend thinks/says it is
         return
 
-    def processOneWord(self, word):
+    def processOneWord(self, word: str):
         """
         runs a single word command from the command folder
         """
@@ -124,8 +150,7 @@ class NLP(object):
 
         self.owner.nlg.say("I don't know that word yet")
 
-
-    def runWordAsFunction(self, path, word):
+    def runWordAsFunction(self, path: str, word: str):
         sys.path.append("%s/%s" % (path, word))
         try:
             command_module = __import__(word)
@@ -133,14 +158,14 @@ class NLP(object):
             return command_module.run(self.owner)
 
         except Exception as e:
-            print( 'failed::' )
-            print( e )
+            print('failed::')
+            print(e)
 
             pass
 
     # TODO - try to find the finite verb
     # NOTE - AT THE MOMENT ONLY PROCESSING COMMANDS
-    def processSentence(self, sentence):
+    def processSentence(self, sentence: str):
         words = sentence.split(None)
         word_count = len(words)
         basepath = 'bin/%s/brain/commands' % self.owner.o['name']
@@ -198,44 +223,32 @@ class NLP(object):
 
     # params at the moment are 'rest of string'
     # long term might break around finite verb and pass whole string?
-    def runSentenceAsFunction(self, path, function, params=None):
-
-        print("runSentenceAsFunction1")
-
+    def runSentenceAsFunction(self, path: str, function: str, params = None):
         sys.path.append(path)
         try:
 
             command_module = __import__(function)
             reload(command_module)  # reload class without restarting pypal
 
-            print("runSentenceAsFunction2")
-
             if(params != None):
                 return command_module.run(self.owner, params)
             else:
                 return command_module.run(self.owner)
-            # pass
-
-            print("runSentenceAsFunction23")
 
         except Exception as e:
-            print( 'failed::' )
-            print( e )
+            print('runSentenceAsFunction failed::')
+            print(e)
     #         self.owner.nlg.log("runSentenceAsFunction FAIL!! \
-				# \n happens when : \
-				# \n failing code in the command. i.e imports used by the command not intalled \
-				# \n venv not running \
-				# \n not passing params when required")
+            # \n happens when : \
+            # \n failing code in the command. i.e imports used by the command not intalled \
+            # \n venv not running \
+            # \n not passing params when required")
 
         pass
 
-    # run several possibilities. decide which is most relevant?
-    # the listener as to suppose an ontological truth in each word as they hear it
-    # when that doesn't happen even over sets of words things have to be considered
-    # and find more context or information. even lead to questioning
+    # def suppose():
+    # def reason():
 
-    def suppose():
-        pass
 
     # ---------------------------- NLP LANGUGAGE UTILS -----------------------------------
 
@@ -267,7 +280,7 @@ class NLP(object):
 
     # TODO - may get rid of this lookup and have root words as delegators
 
-    def hasParams(self, path, word):
+    def hasParams(self, path: str, word: str) -> bool:
         """
         check if parameters True
         """
@@ -282,10 +295,10 @@ class NLP(object):
             # force false if passing a non command. TODO- BUT. we shouldn't be calling if the case.
             return False
 
-    def has_path(self, path_to_directory):
+    def has_path(self, path_to_directory: str) -> bool:
         return os.path.isdir(path_to_directory)
 
-    def has_command(self, path_to_py_file):
+    def has_command(self, path_to_py_file: str) -> bool:
         return os.path.isfile(path_to_py_file)
 
 
@@ -294,38 +307,32 @@ class NLG(object):
     def __init__(self, owner):
         self.owner = owner
 
-    def say(self, words):
-        print("%s : %s" % (self.owner.o['name'], words))
-        return
+    def talk(self, comment: str):
+        import subprocess
+        subprocess.call(["say", comment])
+        pass
 
-    # TODO - setup python logger
-    # TODO - pass ref to pypal?
-    # TODO - logs should write to a file and be accessible by events. i.e. evt12345 - created variable xxx
-    def log(self, words):
+    def say(self, comment: str):
+        print(comment)
+        pass
+
+    def log(self, comment: str, filename: str = "log.json"):
         """
-        log differs to the 'say' method.
-        log should be more about debugging.
-        say should be user comms
+        # TODO - setup python logger
+        # TODO - logs should write to a file and be accessible by events. i.e. evt12345 - created variable xxx
         """
+
+        # Context.BASEPATH   
+        #     f = open(context.BASEPATH + '/' + filename, "w")
+        #     f.write(json.dumps(data))
+        #     f.close()
 
         return  # NOTE <<<<<<<<<<<<<<<<<<<<<< im not running
 
         # TOOD - if debug is true
-        
-        logging.warning("------------------------------------- %s : %s" %
-                        (self.owner.o['name'], words))
+        logging.warning("------------------------------------- %s : %s" % (self.owner.o['name'], words))
         return
 
-    def generate_random_sentence(self, words):
-        """
-        TODO - look at ways of generating random sentences.
-        """
 
-        # 1.
-        # think of model it's currently building.
-        # think if it has any gaps on that model taht it would like to fill
-        # interests. .. 'need to know'
-        # what is x.
-
-        self.say()
-        return
+    # TODO
+    # def generate_random_sentence(self, words):
