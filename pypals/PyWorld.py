@@ -33,21 +33,15 @@ class PyWorld:
         if(is_new[0].lower() == 'y'):
             print("Your name?")
             friend = input("> ")
-
-            # create the new guy # - TODO - may need to write the files?
-
-            # - TODO - may need to write the files? - ask who is my parent! . accepts list
-
             parent = "pypals/skeleton"
             new_pypal = f'pypals/{name}'
             # shutil.copytree(parent, new_pypal)
-
-            # TODO- fix up later. just getting it working as pypi package for now
+            # TODO - fix up later to clone again. just getting it working as pypi package for now
+            
             try:
                 os.mkdir(new_pypal) # create empty dir for user pypals at cwd
             except:
                 print('already done!')
-
 
             try:
                 obj = {}
@@ -58,18 +52,28 @@ class PyWorld:
                 with open(f'{new_pypal}/_meta.json', 'w') as f:
                     json.dump(data, f)
 
-
-                # TODO- fix up later. just getting it working as pypi package for now
                 try:
                     os.mkdir(f'{new_pypal}/hello') # create empty dir for user pypals at cwd
+                    hello = """def run(o):
+    print(f"Hello, to you { o.o['friend']}!")
+    return True"""
+                    with open(f'{new_pypal}/hello/hello.py', 'w') as f:
+                        f.write(hello)
                 except:
                     print('done!')
 
-                hello = """def run(o):
-    print(f"Hello, to you { o.o['friend']}!")
-    return True"""
-                with open(f'{new_pypal}/hello/hello.py', 'w') as f:
-                    f.write(hello)
+
+                try:
+                    os.mkdir(f'{new_pypal}/quit') # create empty dir for user pypals at cwd
+                    quit = """def run(o):
+    import sys
+    sys.exit(0)
+    """
+                    with open(f'{new_pypal}/quit/quit.py', 'w') as f:
+                        f.write(quit)
+                except:
+                    print('done!')
+
 
             except Exception as e:
                 print("Failed to create _meta.json")

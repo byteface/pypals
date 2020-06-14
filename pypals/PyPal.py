@@ -6,7 +6,6 @@ import os.path
 
 from pypals.Program import Program
 
-
 class PyPal(object):
 
     def __init__(self, data):
@@ -67,35 +66,24 @@ class PyPal(object):
         self.nlp.processSentence(information)
         return
 
-    # TODO - need to ask meaning of words. to at least put it into memory for considering
-    # should also be able to check dictionary / nltk sources. but needs to build a program for the word
-
-    def ask_word_meaning(self, word: str):
-        self.nlp.say(f"What is '{word}'?")
-        answer = input("> ")
-        # TODO - NO - should probs be processess response
-        self.nlp.learn_word(word, answer)
-
-
-    def create_command(self, command: str):
-        try:
-            folders = command.split(" ")
-            filepath = f"pypals/{self.o['name']}/"
-            for folder in folders:
+    def create_command(self, command: str):        
+        folders = command.split(" ")
+        filepath = f"pypals/{self.o['name']}/"
+        for folder in folders:
+            try:
                 filepath += f"/{folder}"
                 os.mkdir(filepath)
-        except:
-            print('failed to create folders!')
+            except Exception as e:
+                # print(e)
+                pass
 
         print(f"What should the default response be?")
         default = input("> ")
 
         try:
-            # obj = {}
-            # obj['name'] = name
-            # obj['friend'] = friend
-            # data={}
-            # data['object'] = obj
+
+            # TODO - gen the meta so can do params
+            # data = {}
             # with open(f'{filepath}/_meta.json', 'w') as f:
             #     json.dump(data, f)
 
@@ -168,10 +156,6 @@ class NLP(object):
 
     def __init__(self, owner):
         self.owner = owner
-
-    def learn_word(self, word: str, answer: str):
-        # TODO - learn_word. store what friend thinks/says it is
-        return
 
     def processOneWord(self, word: str):
         """

@@ -1,6 +1,6 @@
 # pypals
 
-Turn your python scripts/snippets into command line buddies
+Turn python snippets into command line buddies
 
 ## install
 
@@ -41,7 +41,8 @@ All clones live in /pypals directory. Pass their name to summon. i.e...
 
 ## MORE
 - cron notes
-echo "find jobpages batch 321" | nohup python3.7 -m pypals jobs >/dev/null 2>&1 &
+echo "do some job batch 1" | nohup python3.7 -m pypals jobs >/dev/null 2>&1 &
+echo "do some job batch 2" | nohup python3.7 -m pypals jobs >/dev/null 2>&1 &
 
 - makefile notes
 pypal:
@@ -67,10 +68,6 @@ note : you can't use package names for commands. i.e. builtins, test
 r - re-run previous command
 
 h - history
-
-## LICENCE
-http://www.gnu.org/licenses/gpl-3.0.html
-
 
 ## Notes
 https://medium.com/@joel.barmettler/how-to-upload-your-python-package-to-pypi-65edc5fe9c56
