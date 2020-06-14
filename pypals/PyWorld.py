@@ -14,7 +14,7 @@ class PyWorld:
         self.get_pypal_by_name(name_to_find)
 
     def get_pypal_by_name(self, name: str):
-        pypal = "bin/%s/" % name
+        pypal = "pypals/%s/" % name
         if name != "" and (os.path.exists(pypal) or os.path.islink(pypal)):
             pal = PyPal({'name': name})
             pal.welcome()
@@ -22,16 +22,19 @@ class PyWorld:
             self.create_new_pypal(name)
 
     def create_new_pypal(self, name: str):
-        pypal = "bin/%s/" % name
+        pypal = "pypals/%s/" % name
         print(f"{name} doesn't exist, create them now? yes or no")
         is_new = input("> ")
-        if(is_new == 'yes' or 'y' or 'Yes' or 'Y'):
+        if(is_new[0].lower() == 'y'):
             print("Your name?")
             friend = input("> ")
 
-            # create the new guy
-            parent = "bin/skeleton"
-            new_pypal = f'bin/{name}'
+            # create the new guy # - TODO - may need to write the files?
+
+            # - TODO - may need to write the files? - ask who is my parent! . accepts list
+
+            parent = "pypals/skeleton"
+            new_pypal = f'pypals/{name}'
             shutil.copytree(parent, new_pypal)
 
             try:
@@ -44,7 +47,7 @@ class PyWorld:
                 with open(f'{new_pypal}/_meta.json', 'w') as f:
                     json.dump(data, f)
             except Exception as e:
-                print("Failed to create new _meta.json")
+                print("Failed to update _meta.json")
 
             # load up your n00b!
             pal = PyPal({'name': name})
@@ -53,7 +56,3 @@ class PyWorld:
         else:
             print("OK, bye for now")
             exit()
-
-
-# if __name__ == "__main__":
-#     world = PyPals(palname)

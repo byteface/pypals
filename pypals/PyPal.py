@@ -4,7 +4,7 @@ from importlib import reload
 import logging
 import os.path
 
-from . import Program
+from pypals.Program import Program
 
 
 class PyPal(object):
@@ -13,7 +13,7 @@ class PyPal(object):
         """
         data : {'name':'pypal'}
         """
-        with open("bin/%s/_meta.json" % data['name']) as json_file:
+        with open(f"pypals/{data['name']}/_meta.json") as json_file:
             self.o = json.load(json_file)['object']
 
         self.history = []
@@ -24,7 +24,7 @@ class PyPal(object):
         self.memory = Memory()
 
     def introduce(self):
-        self.nlg.say(f"Hi my name is {self.o['name']}, Thankyou for creating me!")
+        self.nlg.say(f"Hi, My name is {self.o['name']}, Thankyou for creating me!")
         self.listen()
 
     def welcome(self):
@@ -33,7 +33,7 @@ class PyPal(object):
 
     def listen(self):
         try:
-            self.nlg.say("I am listening...")
+            self.nlg.say("I'm listening...")
             information = input("> ")
             self.process(information)
             self.listen()
@@ -71,7 +71,7 @@ class PyPal(object):
     # should also be able to check dictionary / nltk sources. but needs to build a program for the word
 
     def ask_word_meaning(self, word: str):
-        self.nlp.say("What is '%s'?" % word)
+        self.nlp.say(f"What is '{word}'?")
         answer = input("> ")
         # TODO - NO - should probs be processess response
         self.nlp.learn_word(word, answer)
@@ -116,7 +116,7 @@ class Context(object):
         # self.caller=caller
         # self.callee=callee
 
-        Context.BASEPATH = './bin/%s/brain/commands' % parent.o['name']
+        Context.BASEPATH = './pypals/%s' % parent.o['name']
         Context.LAST_COMMAND = command
 
         path = '/'.join(self.LAST_COMMAND.split(' '))
@@ -143,12 +143,17 @@ class NLP(object):
         """
         runs a single word command from the command folder
         """
-        c_path = 'bin/%s/brain/commands' % self.owner.o['name']
+        c_path = f"pypals/{self.owner.o['name']}"
         if self.has_command(c_path+"/"+word+"/"+word+".py"):
             self.owner.nlg.log("command detected")
             return self.runWordAsFunction(c_path, word)
+        
+        self.owner.nlg.say("I don't have that command!")
+        # TODO - You want me to create it?")
 
-        self.owner.nlg.say("I don't know that word yet")
+
+    # def create_command():
+
 
     def runWordAsFunction(self, path: str, word: str):
         sys.path.append("%s/%s" % (path, word))
@@ -168,7 +173,7 @@ class NLP(object):
     def processSentence(self, sentence: str):
         words = sentence.split(None)
         word_count = len(words)
-        basepath = 'bin/%s/brain/commands' % self.owner.o['name']
+        basepath = f"pypals/{self.owner.o['name']}"
         word_path_arr = []
 
         # walk up the sentence
