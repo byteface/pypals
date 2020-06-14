@@ -22,6 +22,13 @@ class PyWorld:
             self.create_new_pypal(name)
 
     def create_new_pypal(self, name: str):
+
+        try:
+            os.mkdir('pypals') # create empty dir for user pypals at cwd
+        except:
+            print('done!')
+
+
         pypal = "pypals/%s/" % name
         print(f"{name} doesn't exist, create them now? yes or no")
         is_new = input("> ")
@@ -35,19 +42,39 @@ class PyWorld:
 
             parent = "pypals/skeleton"
             new_pypal = f'pypals/{name}'
-            shutil.copytree(parent, new_pypal)
+            # shutil.copytree(parent, new_pypal)
+
+            # TODO- fix up later. just getting it working as pypi package for now
+            try:
+                os.mkdir(new_pypal) # create empty dir for user pypals at cwd
+            except:
+                print('done!')
+
 
             try:
-                with open(f'{new_pypal}/_meta.json') as f:
-                    data = json.load(f)
-                    obj = data['object']
-                    obj['name'] = name
-                    obj['friend'] = friend
-                    data['object'] = obj
+                obj = {}
+                obj['name'] = name
+                obj['friend'] = friend
+                data={}
+                data['object'] = obj
                 with open(f'{new_pypal}/_meta.json', 'w') as f:
                     json.dump(data, f)
+
+
+                # TODO- fix up later. just getting it working as pypi package for now
+                try:
+                    os.mkdir(f'{new_pypal}/hello') # create empty dir for user pypals at cwd
+                except:
+                    print('done!')
+
+                hello = """def run(o):
+    print(f"Hello, to you { o.o['friend']}!")
+    return True"""
+                with open(f'{new_pypal}/hello/hello.py', 'w') as f:
+                    f.write(hello)
+
             except Exception as e:
-                print("Failed to update _meta.json")
+                print("Failed to create _meta.json")
 
             # load up your n00b!
             pal = PyPal({'name': name})
