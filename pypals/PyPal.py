@@ -77,6 +77,40 @@ class PyPal(object):
         self.nlp.learn_word(word, answer)
 
 
+    def create_command(self, command: str):
+        try:
+            folders = command.split(" ")
+            filepath = f"pypals/{self.o['name']}/"
+            for folder in folders:
+                filepath += f"/{folder}"
+                os.mkdir(filepath)
+        except:
+            print('failed to create folders!')
+
+        print(f"What should the default response be?")
+        default = input("> ")
+
+        try:
+            # obj = {}
+            # obj['name'] = name
+            # obj['friend'] = friend
+            # data={}
+            # data['object'] = obj
+            # with open(f'{filepath}/_meta.json', 'w') as f:
+            #     json.dump(data, f)
+
+            func = f"""def run(o):
+    print('{default}')
+    return '{default}'"""
+
+            cmd = "_".join(folders) + ".py"
+            with open(f'{filepath}/{cmd}', 'w') as f:
+                f.write(func)
+
+        except:
+            print('failed to create folders!')
+
+
 # TODO - see if I can use inspection to get the callee so don't have to pass context. tho i think that just gets the class name?
 # - also then you couldn't write to a different context. (inspection could set it as the default if non passed?)
 class Memory(object):
@@ -148,11 +182,11 @@ class NLP(object):
             self.owner.nlg.log("command detected")
             return self.runWordAsFunction(c_path, word)
         
-        self.owner.nlg.say("I don't have that command!")
-        # TODO - You want me to create it?")
-
-
-    # def create_command():
+        self.owner.nlg.say("I don't know that command!")
+        print(f"Do you want me to create the command: {word}")
+        is_new_command = input("> ")
+        if(is_new_command[0].lower() == 'y'):
+            self.owner.create_command(word)
 
 
     def runWordAsFunction(self, path: str, word: str):
@@ -224,7 +258,13 @@ class NLP(object):
         # TODO - if no command, attempt gnerating reponse from the self compiled programs.
         # TODO - integrate memory, world states, schemas and emotions
 
-        return self.owner.nlg.say("No command found")
+        self.owner.nlg.say("No command found")
+        print(f"Do you want me to create the command: {word}")
+        is_new_command = input("> ")
+        if(is_new_command[0].lower() == 'y'):
+            self.owner.create_command(sentence)
+
+        return
 
     # params at the moment are 'rest of string'
     # long term might break around finite verb and pass whole string?
@@ -260,23 +300,23 @@ class NLP(object):
     # TODO - if one word use lookup, else use NLTK sentimement tool
     # NOTE - false DOES NOT MEAN it is negative, it could be neutral
 
-    def is_string_positive(s):
+    def is_string_positive(self,s):
         pass
 
     # check a lookup table of no words. program needs to be able to expand that list
     # TODO - if one word use lookup, else use NLTK sentimement tool
     # NOTE - false DOES NOT MEAN it is positive, it could be neutral
-    def is_string_negative(s):
+    def is_string_negative(self,s):
         pass
 
     # check a lookup table of
     # TODO - building lookup tables on the fly is something we need to do
     # RETURN THE NUMBER OR WORD FALSE
-    def is_string_number(s):
+    def is_string_number(self,s):
         # TODO - check if NLTK can do this
         pass
 
-    def is_math_operator():
+    def is_math_operator(self,s):
         # TODO - check if NLTK can do this
         pass
 
@@ -327,11 +367,6 @@ class NLG(object):
         #     f.close()
 
         return  # NOTE <<<<<<<<<<<<<<<<<<<<<< im not running
-
-        # TOOD - if debug is true
-        logging.warning("------------------------------------- %s : %s" %
-                        (self.owner.o['name'], words))
-        return
 
     # TODO
     # def generate_random_sentence(self, words):

@@ -1,10 +1,10 @@
 # pypals
 
-Turns your python scripts/snippets into command line buddies
+Turn your python scripts/snippets into command line buddies
 
 ## install
 
-	$ python3.7 -m pip insall pypals
+	$ python3.7 -m pip install pypals
 
 ## run
 
@@ -41,7 +41,22 @@ All clones live in /pypals directory. Pass their name to summon. i.e...
 
 ## MORE
 - cron notes
+echo "find jobpages batch 321" | nohup python3.7 -m pypals jobs >/dev/null 2>&1 &
+
 - makefile notes
+pypal:
+	cd /home/ubuntu/Desktop/someapp/automate/; \
+	python3.7 -m pypals myscraper server.py
+
+
+If you are running several bots at once you can trash them all easy by putting this in your makefile:
+
+killall:
+	sudo service solr stop; \
+	pkill -9 python
+
+
+
 
 ## DOCUMENTATION
 note : you can't use package names for commands. i.e. builtins, test
@@ -50,7 +65,8 @@ note : you can't use package names for commands. i.e. builtins, test
 - TODO - provide more examples. i.e csv ingesters and webscrapers.
 
 ## SHORTCUTS 
-r - repeats the last command
+r - re-run previous command
+
 h - history
 
 ## LICENCE

@@ -5,7 +5,6 @@ from typing import *
 
 from pypals.PyPal import PyPal
 
-
 class PyWorld:
 
     def __init__(self, name: str):
@@ -14,6 +13,12 @@ class PyWorld:
         self.get_pypal_by_name(name_to_find)
 
     def get_pypal_by_name(self, name: str):
+
+        try:
+            os.mkdir('pypals') # create empty dir for user pypals at cwd
+        except:
+            print('done!')
+
         pypal = "pypals/%s/" % name
         if name != "" and (os.path.exists(pypal) or os.path.islink(pypal)):
             pal = PyPal({'name': name})
@@ -22,13 +27,6 @@ class PyWorld:
             self.create_new_pypal(name)
 
     def create_new_pypal(self, name: str):
-
-        try:
-            os.mkdir('pypals') # create empty dir for user pypals at cwd
-        except:
-            print('done!')
-
-
         pypal = "pypals/%s/" % name
         print(f"{name} doesn't exist, create them now? yes or no")
         is_new = input("> ")
@@ -48,7 +46,7 @@ class PyWorld:
             try:
                 os.mkdir(new_pypal) # create empty dir for user pypals at cwd
             except:
-                print('done!')
+                print('already done!')
 
 
             try:
