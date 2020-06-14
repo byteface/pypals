@@ -1,4 +1,4 @@
-import setuptools
+from distutils.core import setup
 import os
 
 with open("README.md", "r") as fh:
@@ -23,4 +23,7 @@ setup(
     include_package_data=True
 )
 
-os.mkdir('pypals') # create empty dir for user pypals at cwd
+try:
+    os.mkdir('pypals') # create empty dir for user pypals at cwd
+except:
+    print('done!')
