@@ -4,6 +4,7 @@ import os
 setup(
     name="pypals",
     version="0.0.5",
+    keywords = ['pypals'],
     author="@byteface",
     author_email="byteface@gmail.com",
     description="Terminal buddies to run your python snippets",
@@ -15,5 +16,5 @@ setup(
         "Programming Language :: Python :: 3.7",
     ],
     packages=["pypals"],
-    include_package_data=True
+    include_package_data = True
 )
