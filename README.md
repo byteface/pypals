@@ -57,7 +57,6 @@ killall:
 
 
 
-
 ## DOCUMENTATION
 note : you can't use package names for commands. i.e. builtins, test
 
@@ -71,3 +70,7 @@ h - history
 
 ## LICENCE
 http://www.gnu.org/licenses/gpl-3.0.html
+
+
+## Notes
+https://medium.com/@joel.barmettler/how-to-upload-your-python-package-to-pypi-65edc5fe9c56
