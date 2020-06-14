@@ -1,8 +1,8 @@
 from distutils.core import setup
 import os
 
-with open("README.md", "r") as fh:
-    long_description = fh.read()
+# with open("README.md", "r") as fh:
+    # long_description = fh.read()
 
 setup(
     name="pypals",
@@ -10,7 +10,7 @@ setup(
     author="@byteface",
     author_email="byteface@gmail.com",
     description="Terminal buddies to run your python snippets",
-    long_description=long_description,
+    # long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/byteface/pypals",
     download_url = 'https://github.com/byteface/pypals/archive/0.0.2.tar.gz',
