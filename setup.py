@@ -9,7 +9,7 @@ setup(
     version="0.0.2",
     author="@byteface",
     author_email="byteface@gmail.com",
-    description="Fun way to store random python scripts snippets",
+    description="Terminal buddies to run your python snippets",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/byteface/pypals",
@@ -19,11 +19,8 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.7",
     ],
-    packages=["app"],
+    packages=["pypals"],
     include_package_data=True
 )
 
-os.mkdir('pypals')
-
-
-# https://github.com/byteface/pypals/archive/0.0.2.tar.gz
+os.mkdir('pypals') # create empty dir for user pypals at cwd
