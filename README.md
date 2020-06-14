@@ -11,19 +11,16 @@
 Keeps track of python scripts and snippets as command line pals.
 
 ## installation
-
-	Get the package from PyPI i.e.
+Get the package from PyPI i.e.
 
 	$ python3.7 -m pip install pypals
 
 ## usage
-
 Sometimes you write code maybe to do some random job or snippet, scrape something, send a tweet, whatever.
 
-It's good to keep those bits of odd code somewhere. pypals are good and easy to remember ages later.
+It's useful to keep those bits of odd code somewhere. pypals are easy to remember ages later.
 
-
-	$ python3 -m pypals sportsfan
+	$ python3.7 -m pypals sportsfan
 	$ sportsfan doesn't exist, create them now? yes or no
 	$ > yes
 	$ your name?
@@ -39,48 +36,54 @@ now try running this command...
 
 look in pypals/sportsfan/hello/hello.py file to see an example of a command. Add as many commands as you like for your project.
 
-Next try typing a command like 'scrape somesite.com for images'...
+Next try typing a command like 'scrape somesite for images'...
 
-- TODO - explain creating command with longer name. or just add that one that creates them.
+You see it creates it for you. you can then just fill it in.
+
+Next try typing 'quit'
+
+If you're editing a python command you don't need to restart pypal. It will reload the command. so just type 'r' to rerun it.
+
 - TODO - explain passing paramaters
-- TODO - explain running headless
-- TODO - the quit command
+- TODO - explain commands between bots / sharing commands
 
-## MORE
-- cron notes
 
-echo "do some job batch 1" | nohup python3.7 -m pypals jobs >/dev/null 2>&1 &
+## more
+###  cron notes
+put in sometask.sh file chmod +x the file.
 
-echo "do some job batch 2" | nohup python3.7 -m pypals jobs >/dev/null 2>&1 &
+	echo "do some job batch 1" | nohup python3.7 -m pypals jobs >/dev/null 2>&1 &
 
-- makefile notes
+- you may want those to self terminate *see 'quit'
 
+### makefile notes
+something like this in your makefile to boot one or more faster
+
+```
 pypal:
-
 	cd /home/ubuntu/Desktop/someapp/automate/; \
-
 	python3.7 -m pypals myscraper server.py
-
-
+```
 
 If you run several pypals simoultaneously you can trash them all easy by putting this in your makefile:
 
+```
 killall:
-	sudo service solr stop; \
 	pkill -9 python
+```
+
+## documentation
+- note : you can't use package names for commands. i.e. builtins, test
+- note : use task manager to montior bots
+
+the base path to a command is available if loading writing files to same folder:
+
+o.context.COMMAND_PATH
 
 
-## DOCUMENTATION
-note : you can't use package names for commands. i.e. builtins, test
-
-- TODO - explain commands between bots / sharing commands
-- TODO - provide more examples. i.e csv ingesters and webscrapers.
-- TODO - using task manager to montior bots?
-
-## SHORTCUTS 
-r - re-run previous command
-
-h - history
+### shortcuts 
+- r - re-run previous command
+- h - history
 
 ## Notes
 https://medium.com/@joel.barmettler/how-to-upload-your-python-package-to-pypi-65edc5fe9c56

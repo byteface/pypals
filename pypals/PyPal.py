@@ -81,14 +81,17 @@ class PyPal(object):
         default = input("> ")
 
         try:
-
-            # TODO - gen the meta so can do params
-            # data = {}
-            # with open(f'{filepath}/_meta.json', 'w') as f:
-            #     json.dump(data, f)
+            # gen the meta
+            data={}
+            data["object"]={}
+            data["rules"]={"parameters":"False","redirect":"False"}
+            data["events"]=[]
+            data["stats"]={"hitcount":"0"}
+            with open(f'{filepath}/_meta.json', 'w') as f:
+                json.dump(data, f)
 
             func = f"""def run(o):
-    print('{default}')
+    print('running: {default}')
     return '{default}'"""
 
             cmd = "_".join(folders) + ".py"

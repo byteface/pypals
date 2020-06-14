@@ -1,0 +1,12 @@
+README.md
+setup.cfg
+setup.py
+pypals/Program.py
+pypals/PyPal.py
+pypals/PyWorld.py
+pypals/__init__.py
+pypals/_meta.py
+pypals.egg-info/PKG-INFO
+pypals.egg-info/SOURCES.txt
+pypals.egg-info/dependency_links.txt
+pypals.egg-info/top_level.txt
