@@ -13,7 +13,7 @@ setup(
     author_email="byteface@gmail.com",
     description="Terminal buddies to store and run python snippets",
     # long_description_content_type='text/markdown',
-    # long_description=long_description,
+    long_description="Keeps track of python scripts and snippets as command line pals.",
     url="https://github.com/byteface/pypals",
     download_url = 'https://github.com/byteface/pypals/archive/0.0.7.tar.gz',
     license="MIT",
