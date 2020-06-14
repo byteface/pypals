@@ -6,14 +6,14 @@ import os
 
 setup(
     name="pypals",
-    version="0.0.2",
+    version="0.0.3",
     author="@byteface",
     author_email="byteface@gmail.com",
     description="Terminal buddies to run your python snippets",
     # long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/byteface/pypals",
-    download_url = 'https://github.com/byteface/pypals/archive/0.0.2.tar.gz',
+    download_url = 'https://github.com/byteface/pypals/archive/0.0.3.tar.gz',
     license="GNU General Public License v3.0",
     classifiers=[
         "Programming Language :: Python :: 3",
