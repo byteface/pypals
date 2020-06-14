@@ -1,20 +1,15 @@
 from distutils.core import setup
 import os
 
-# with open("README.md", "r") as fh:
-    # long_description = fh.read()
-
 setup(
     name="pypals",
-    version="0.0.3",
+    version="0.0.4",
     author="@byteface",
     author_email="byteface@gmail.com",
     description="Terminal buddies to run your python snippets",
-    # long_description=long_description,
-    long_description_content_type="text/markdown",
     url="https://github.com/byteface/pypals",
-    download_url = 'https://github.com/byteface/pypals/archive/0.0.3.tar.gz',
-    license="GNU General Public License v3.0",
+    download_url = 'https://github.com/byteface/pypals/archive/0.0.4.tar.gz',
+    license="MIT",
     classifiers=[
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.7",
