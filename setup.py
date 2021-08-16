@@ -1,13 +1,11 @@
 from setuptools import setup
-import os
 
-long_description=""
 with open("README.md", "r") as f:
         long_description = f.read()
 
 setup(
     name="pypals",
-    version="0.0.8",
+    version="0.0.9",
     keywords = ['pypals'],
     author="@byteface",
     author_email="byteface@gmail.com",
@@ -15,11 +13,12 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/byteface/pypals",
-    download_url = 'https://github.com/byteface/pypals/archive/0.0.8.tar.gz',
+    download_url = 'https://github.com/byteface/pypals/archive/0.0.9.tar.gz',
     license="MIT",
     classifiers=[
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Build Tools',
+        "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.7",
         "License :: OSI Approved :: MIT License"
     ],

@@ -10,6 +10,10 @@
 
 Keeps track of python scripts and snippets as command line pals.
 
+[![PyPI version](https://badge.fury.io/py/pypals.svg)](https://badge.fury.io/py/pypals.svg)
+
+[![Downloads](https://pepy.tech/badge/pypals)](https://pepy.tech/project/pypals)
+
 ## installation
 Get the package from PyPI i.e.
 

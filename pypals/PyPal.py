@@ -170,7 +170,7 @@ class NLP(object):
             return self.runWordAsFunction(c_path, word)
         
         self.owner.nlg.say("I don't know that command!")
-        print(f"Do you want me to create the command: {word}")
+        print(f"Do you want me to create the command?: {word}")
         is_new_command = input("> ")
         if(is_new_command[0].lower() == 'y'):
             self.owner.create_command(word)
@@ -245,8 +245,8 @@ class NLP(object):
         # TODO - if no command, attempt gnerating reponse from the self compiled programs.
         # TODO - integrate memory, world states, schemas and emotions
 
-        self.owner.nlg.say("No command found")
-        print(f"Do you want me to create the command: {word}")
+        self.owner.nlg.say("command not found")
+        print(f"Do you want me to create the command?: {sentence}")
         is_new_command = input("> ")
         if(is_new_command[0].lower() == 'y'):
             self.owner.create_command(sentence)
