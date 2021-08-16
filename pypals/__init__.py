@@ -1,10 +1,22 @@
-__version__ = "0.0.9"
+"""
+    pypals
+    ====================================
 
-import sys
-from pypals.PyWorld import PyWorld
+    pypals now has a cli interface. check __main__.py for usage
 
-name = ""
-if len(sys.argv)>1:
-    name = sys.argv[1]
+"""
 
-PyWorld(name)
+__version__ = "t-1"
+
+class DefaultCommands():
+    """ default commands that come with first pypal """
+
+    HELLO = """def run(o):
+    print(f"Hello, to you { o.o['friend']}!")
+    return True
+    """
+    
+    QUIT = """def run(o):
+    import sys
+    sys.exit(0)
+    """

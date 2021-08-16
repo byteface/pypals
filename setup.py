@@ -5,7 +5,7 @@ with open("README.md", "r") as f:
 
 setup(
     name="pypals",
-    version="0.0.9",
+    version="t-1",
     keywords = ['pypals'],
     author="@byteface",
     author_email="byteface@gmail.com",
