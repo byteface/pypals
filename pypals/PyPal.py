@@ -341,19 +341,22 @@ class NLG(object):
     def say(self, comment: str):
         print(comment)
         pass
-
-    def log(self, comment: str, filename: str = "log.json"):
+                     
+    def log(self, comment: str, filename: str = None):
         """
-        # TODO - setup python logger
-        # TODO - logs should write to a file and be accessible by events. i.e. evt12345 - created variable xxx
+        # TODO - logs should be accessible by multilpe event keys. i.e. evt12345 x
         """
+        if filename is None:
+            filename =  self.owner.context.LAST_COMMAND + ".log"
 
-        # Context.BASEPATH
-        #     f = open(context.BASEPATH + '/' + filename, "w")
-        #     f.write(json.dumps(data))
-        #     f.close()
-
-        return  # NOTE <<<<<<<<<<<<<<<<<<<<<< im not running
-
+        FORMAT = '{"t":"%(asctime)s","m":%(message)s}'
+        #{ "t":"2006-02-08 22:20:02", "d":"data goes here", "uid": }
+        logpath = self.owner.context.COMMAND_PATH + '/' + filename
+        logging.basicConfig(filename=logpath, format=FORMAT, level=logging.DEBUG)
+        # logging.debug(comment)
+        logging.info(comment)
+        # logging.warning(comment)
+        return
+                     
     # TODO
     # def generate_random_sentence(self, words):
