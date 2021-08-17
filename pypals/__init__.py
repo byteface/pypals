@@ -6,7 +6,7 @@
 
 """
 
-__version__ = "t-1"
+__version__ = "1.0.1"
 
 class DefaultCommands():
     """ default commands that come with first pypal """
