@@ -8,7 +8,7 @@
     <br>
 </h1>
 
-Keeps track of python scripts and snippets as command line pals.
+Keeps your python scripts and snippets as command line pals.
 
 [![PyPI version](https://badge.fury.io/py/pypals.svg)](https://badge.fury.io/py/pypals.svg)
 
@@ -42,14 +42,31 @@ now look in pypals/sportsfan/hello/hello.py file to see an example of a command.
 
 To create commands try typing 'scrape somesite for images' at the prompt.
 
-You will see it creates it for you. You can now just edit the file created and fill it.
+You will see it creates it for you. You can now just edit the file created and fill it in with your code.
 
 Next try typing 'quit'
 
 If you're editing a python command you don't need to restart pypal. It will reload the command. so just type 'r' to rerun it at the prompt.
 
-- TODO - explain passing paramaters
+- parameters
+pass any words after your command it will pick them up as parameters.
+
+when creating a command it will ask you what to type as a response, you can put any string. 
+however if you try instead typing: 
+
+{args}
+
+Now run your command and type some extra words after it. cool huh.
+
 - TODO - explain commands between bots / sharing commands
+you can import pypals into other pypals and share commands between them.
+
+- TODO - notes on logging. now off by default.
+# self.owner.nlg.log("command detected")
+
+You can also call or execute any commands you created directly from the command line. i.e.
+
+python3 -m pypals sportsfan hello
 
 
 ## help
@@ -78,7 +95,7 @@ shows a list of all your pypals
 ###  cron notes
 put in sometask.sh file chmod +x the file.
 
-	echo "do some job batch 1" | nohup python3.7 -m pypals jobs >/dev/null 2>&1 &
+	echo "do some job batch 1" | nohup python3 -m pypals jobs >/dev/null 2>&1 &
 
 - you may want those to self terminate *see 'quit'
 
@@ -88,7 +105,7 @@ something like this in your makefile to boot one or more faster
 ```
 pypal:
 	cd /home/ubuntu/Desktop/someapp/automate/; \
-	python3 -m pypals myscraper server.py
+	python3 -m pypals myscraper somefunc
 ```
 
 If you run several pypals simoultaneously you can trash them all easy by putting this in your makefile:
@@ -110,8 +127,9 @@ o.context.COMMAND_PATH
 
 while a pypal is running you can pass it the following commands as shortcuts
 
-- r - re-run previous command. (i.e. after editing the python file)
-- h - history
+r - re-run previous command. (i.e. after editing the python file)
+h - history
+q - quit
 
 ## Notes
 https://medium.com/@joel.barmettler/how-to-upload-your-python-package-to-pypi-65edc5fe9c56
@@ -119,3 +137,5 @@ https://medium.com/@joel.barmettler/how-to-upload-your-python-package-to-pypi-65
 
 ## about
 pypals was my first every python project written in python2 in about 2012. It is a useful way to organise code snippets and do research. In 2019 I ported it to python 3 while learning to make pip packages.
+
+please use it responsibly and if you want to contribute, fork it and send me a pull request.

@@ -4,7 +4,11 @@ from importlib import reload
 import logging
 import os.path
 
+from rich import print
+
 from pypals.Program import Program
+
+from . import Utils
 
 class PyPal(object):
 
@@ -19,7 +23,6 @@ class PyPal(object):
         self.nlp = NLP(self)
         self.nlg = NLG(self)
         # self.context=Context( [self], [self] ) # talk to self
-        # TODO - wont I need all these to not be class vars in long run so can parralelise?. this'll do for now.
         self.memory = Memory()
 
     def introduce(self):
@@ -48,16 +51,37 @@ class PyPal(object):
 
             # helpers/shortcuts
             # show history
-            if information is 'h':
+            if information == 'h':
                 for h in self.history:
                     print(h)
                 return
 
             # repeat last command
-            if information is 'r':
+            if information == 'r':
                 print(self.history[len(self.history)-2])
                 self.process(self.history[len(self.history)-2])
                 return
+
+            # quit
+            if information == 'q':
+                self.nlg.say("Goodbye")
+                sys.exit()
+
+            # list commands
+            if information == 'l':
+                for cmd in os.listdir(f'pypals/{self.o["name"]}'):
+                    print(cmd)
+                return
+            
+            # show stats
+            if information == 'stats':
+                print(self.o['stats'])
+                return
+            
+            # show memory
+            # if information == 'm':
+                # print(self.memory)
+                # return
 
             # do it
             self.nlp.processOneWord(information)
@@ -90,8 +114,8 @@ class PyPal(object):
             with open(f'{filepath}/_meta.json', 'w') as f:
                 json.dump(data, f)
 
-            func = f"""def run(o):
-    print('running: {default}')
+            func = f"""def run(o, *args, **kwargs):
+    print(f'running: {default}')
     return '{default}'"""
 
             cmd = "_".join(folders) + ".py"
@@ -107,6 +131,7 @@ class PyPal(object):
 class Memory(object):
 
     def __init__(self):
+        # self.data = {}
         pass
 
     def create(self, context=None, data=None, filename: str = "model.json"):
@@ -119,16 +144,15 @@ class Memory(object):
         data = json.loads(f.read())
         return data
 
-    # def update(self, data=None, filename="model.json" ):
-    #     pass
-
-    # def delete(filename="model.json"):
-    #     pass
-
-    # def relate
-    # create binding to the memory blobs in other commands for access here?
-
-
+    def update(self, context=None, data=None, filename: str = "model.json"):
+        f = open(context.COMMAND_PATH + '/' + filename, "w")
+        f.write(json.dumps(data))
+        f.close()
+    
+    def delete(self, context=None, filename: str = "model.json"):
+        os.remove(context.COMMAND_PATH + '/' + filename)
+    
+    
 class Context(object):
 
     BASEPATH = ''
@@ -159,35 +183,32 @@ class NLP(object):
 
     def __init__(self, owner):
         self.owner = owner
-
+        
     def processOneWord(self, word: str):
         """
         runs a single word command from the command folder
         """
         c_path = f"pypals/{self.owner.o['name']}"
-        if self.has_command(c_path+"/"+word+"/"+word+".py"):
-            self.owner.nlg.log("command detected")
+        if self.has_command(f"{c_path}/{word}/{word}.py"):
+            # self.owner.nlg.log("command detected")
             return self.runWordAsFunction(c_path, word)
         
         self.owner.nlg.say("I don't know that command!")
         print(f"Do you want me to create the command?: {word}")
-        is_new_command = input("> ")
-        if(is_new_command[0].lower() == 'y'):
+        if Utils.y_n(input("> ")):
             self.owner.create_command(word)
 
 
     def runWordAsFunction(self, path: str, word: str):
-        sys.path.append("%s/%s" % (path, word))
+        sys.path.append(f"{path}/{word}")
         try:
             command_module = __import__(word)
             reload(command_module)  # reload class without restarting pypal
             return command_module.run(self.owner)
-
         except Exception as e:
-            print('failed::')
-            print(e)
+            print('failed::', e)
+            return 'failed'
 
-            pass
 
     # TODO - try to find the finite verb
     # NOTE - AT THE MOMENT ONLY PROCESSING COMMANDS
@@ -201,13 +222,13 @@ class NLP(object):
         for word in words:
 
             root = basepath+"/"+'/'.join(word_path_arr)
-            has_path = self.has_path(root + "/" + word)
+            has_path = os.path.isdir(root + "/" + word)
 
             # if next word is the last word. check for a command and run it without params.
             if (len(word_path_arr)+1) == word_count:
-                path = root+"/"+word
+                path = root + "/" + word
                 function = '_'.join(word_path_arr) + "_" + word
-                if self.has_command(path+"/"+function+".py"):
+                if self.has_command(f"{path}/{function}.py"):
                     return self.runSentenceAsFunction(path, function)
 
             # if nowhere to go. but there's a command at current path. run it and pass the rest as param
@@ -226,8 +247,7 @@ class NLP(object):
                     # TODO - note. i see i built up to path to strip param. problem here is param is on the command_path. and doesn't get parsed off until here. during execution.
                     # TODO - will have a rethink about how want context to work before changing this. so for now will operate on the context obj here
                     # TODO - when doing change, nlp ref should probs get given to context. or context keeps them all in array.
-                    self.owner.context.COMMAND_PATH = self.owner.context.COMMAND_PATH.replace(
-                        params, '')
+                    self.owner.context.COMMAND_PATH = self.owner.context.COMMAND_PATH.replace(params, '')
                     #self.owner.context.PARAMS = params
 
                     # TODO - throw error if no param is passed
@@ -247,8 +267,7 @@ class NLP(object):
 
         self.owner.nlg.say("command not found")
         print(f"Do you want me to create the command?: {sentence}")
-        is_new_command = input("> ")
-        if(is_new_command[0].lower() == 'y'):
+        if Utils.y_n(input("> ")):
             self.owner.create_command(sentence)
 
         return
@@ -268,44 +287,128 @@ class NLP(object):
                 return command_module.run(self.owner)
 
         except Exception as e:
-            print('runSentenceAsFunction failed::')
-            print(e)
-    #         self.owner.nlg.log("runSentenceAsFunction FAIL!! \
-            # \n happens when : \
-            # \n failing code in the command. i.e imports used by the command not intalled \
-            # \n venv not running \
-            # \n not passing params when required")
+            print('runSentenceAsFunction failed::', e)
+            print("This can happen when :")
+            print("Failing code in your command. i.e imports used by the command not intalled")
+            print("Maybe your venv is not running?")
+            # print("not passing params when required")
 
-        pass
 
     # def suppose():
     # def reason():
 
     # ---------------------------- NLP LANGUGAGE UTILS -----------------------------------
 
-    # check a lookup table of yes words. program needs to be able to expand that list
-    # TODO - if one word use lookup, else use NLTK sentimement tool
-    # NOTE - false DOES NOT MEAN it is negative, it could be neutral
+    def word_to_number(self, numberword: str):
+        # take a string for example 'five' and returns the number 5
+        # TODO - make this more robust
+        numberword = numberword.lower()
+        
+        return {
+            'one': 1,
+            'two': 2,
+            'three': 3,
+            'four': 4,
+            'five': 5,
+            'six': 6,
+            'seven': 7,
+            'eight': 8,
+            'nine': 9,
+            'ten': 10,
+            'eleven': 11,
+            'twelve': 12,
+            'thirteen': 13,
+            'fourteen': 14,
+            'fifteen': 15,
+            'sixteen': 16,
+            'seventeen': 17,
+            'eighteen': 18,
+            'nineteen': 19,
+            'twenty': 20,
+            'thirty': 30,
+            'forty': 40,
+            'fifty': 50,
+            'sixty': 60,
+            'seventy': 70,
+            'eighty': 80,
+            'ninety': 90
+        }.get(numberword, None)
 
-    def is_string_positive(self,s):
-        pass
+    def number_to_word(self, number: int):
+        # take a number and returns the word equivalent
+        # TODO - make this more robust
+        return {
+            1: 'one',
+            2: 'two',
+            3: 'three',
+            4: 'four',
+            5: 'five',
+            6: 'six',
+            7: 'seven',
+            8: 'eight',
+            9: 'nine',
+            10: 'ten',
+            11: 'eleven',
+            12: 'twelve',
+            13: 'thirteen',
+            14: 'fourteen',
+            15: 'fifteen',
+            16: 'sixteen',
+            17: 'seventeen',
+            18: 'eighteen',
+            19: 'nineteen',
+            20: 'twenty',
+            30: 'thirty',
+            40: 'forty',
+            50: 'fifty',
+            60: 'sixty',
+            70: 'seventy',
+            80: 'eighty',
+            90: 'ninety'
+        }.get(number, None)
 
-    # check a lookup table of no words. program needs to be able to expand that list
-    # TODO - if one word use lookup, else use NLTK sentimement tool
-    # NOTE - false DOES NOT MEAN it is positive, it could be neutral
-    def is_string_negative(self,s):
-        pass
+    '''
+    def phrase_to_math_operator(self, phrase: str):
+        # take a string for example 'plus' and returns the math operator '+'
+        # TODO - make this more robust
+        return {
+            'plus': '+',
+            'minus': '-',
+            'divided': '/',
+            'multiplied': '*'
+            # inlucde more here
+            'modulus': '%',
+            'times': '*',
+            'divide': '/',
+            # add other ways of saying it here
+            'take away': '-',
+            'divided by': '/',
+            'add': '+',
+            'added to': '+',
+        }.get(phrase, None)
 
-    # check a lookup table of
-    # TODO - building lookup tables on the fly is something we need to do
-    # RETURN THE NUMBER OR WORD FALSE
-    def is_string_number(self,s):
-        # TODO - check if NLTK can do this
-        pass
 
-    def is_math_operator(self,s):
-        # TODO - check if NLTK can do this
-        pass
+    def math_operator_to_phrase(self, phrase: str):
+        # take a string for example 'plus' and returns the math operator '+'
+        # TODO - make this more robust
+        return {
+            'plus': '+',
+            'minus': '-',
+            'divided': '/',
+            'multiplied': '*'
+        }.get(phrase, None)
+
+    def phrase_to_function(self, phrase: str):
+        raise NotImplementedError
+        # match phrases to functions
+        # take a phrase for example 'how many' and returns the function len()
+        # TODO - make this more robust
+        # return {
+            # 'how many': len,
+            # 'how much': sum,
+            # 'what': lambda x: x,
+            # 'what is the average of': lambda x: sum / len,
+    '''
 
     # ---------------------------- NLP FILE UTILS -----------------------------------
 
@@ -341,7 +444,7 @@ class NLG(object):
     def say(self, comment: str):
         print(comment)
         pass
-                     
+
     def log(self, comment: str, filename: str = None):
         """
         # TODO - logs should be accessible by multilpe event keys. i.e. evt12345 x
@@ -357,6 +460,3 @@ class NLG(object):
         logging.info(comment)
         # logging.warning(comment)
         return
-                     
-    # TODO
-    # def generate_random_sentence(self, words):

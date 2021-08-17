@@ -11,11 +11,11 @@ from pathlib import Path
 from rich import print
 
 from .PyPal import PyPal
-from . import DefaultCommands, __version__
+from . import DefaultCommands, __version__, Utils
 
 PYPALS_DIR = 'pypals' # TODO - pypal should also reference this value
 
-def get_pypal_by_name(name: str):
+def get_pypal_by_name(name: str, command: str=None):
     # create a dir to store pypals if not already there
     if not Path(PYPALS_DIR).exists():
         try:
@@ -27,16 +27,22 @@ def get_pypal_by_name(name: str):
     pypal = f"{PYPALS_DIR}/{name}/"
     if name != "" and (os.path.exists(pypal) or os.path.islink(pypal)):
         pal = PyPal({'name': name})
-        pal.welcome()
+
+        if command is None:
+            pal.welcome()
+        else:
+            try:
+                pal.process(command)
+            except Exception as e:
+                print(e)
     else:
         create_new_pypal(name)
 
 
 def create_new_pypal(name: str):
     pypal = f"{PYPALS_DIR}/{name}/"
-    print(f"{name} does not exist. Would you like to create them now? y/n")
-    is_new = input("> ")
-    if(is_new[0].lower() == 'y'):
+    print(f"{name} does not exist. Would you like to create them now?")
+    if Utils.y_n(input("> ")):
         print("What is your name?")
         friend = input("> ")
         new_pypal = f'{PYPALS_DIR}/{name}'
@@ -94,7 +100,7 @@ def do_things(arguments, name):
         print(os.listdir("pypals"))
         return
     if arguments.help is True:
-        print('Here is a list of the available commands. You can also pass a pypals name')
+        print("Here's a list of the available commands. You can also pass a pypals name")
         print('-h, --help')
         print('-v, --version')
         print('-l, --list')
@@ -104,12 +110,15 @@ def do_things(arguments, name):
         return __version__
 
     # runs if no arguments are passed
-    if name is None:
+    command = None
+    if name is None or len(name) == 0:
         print("Who are you looking for?")
         name = input("> ")
     elif isinstance(name, list):
+        if len(name) > 1:
+            command = name[1]
         name = name[0]
-    get_pypal_by_name(name)
+    get_pypal_by_name(name, command)
 
 
 if __name__ == "__main__":
