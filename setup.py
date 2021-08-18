@@ -13,7 +13,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/byteface/pypals",
-    download_url = 'https://github.com/byteface/pypals/archive/0.0.9.tar.gz',
+    download_url = 'https://github.com/byteface/pypals/archive/1.0.3.tar.gz',
     license="MIT",
     classifiers=[
         'Intended Audience :: Developers',
