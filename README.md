@@ -21,6 +21,9 @@ Get the package from pypi i.e.
 	$ python3 -m pip install pypals
 
 
+see screen shot in archive folder for using pypal in vscode terminal
+
+
 ## usage
 Sometimes you write code maybe to do some random job or snippet, scrape something, send a tweet, whatever.
 
