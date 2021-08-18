@@ -18,7 +18,7 @@ Keeps your python scripts and snippets as command line pals.
 ## installation
 Get the package from pypi i.e.
 
-	$ python3 -m pip install pypals
+	$ python3 -m pip install pypals --upgrade
 
 
 see screen shot in archive folder for using pypal in vscode terminal
