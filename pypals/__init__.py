@@ -21,6 +21,54 @@ class DefaultCommands():
     sys.exit(0)
     """
 
+    GOOGLE = """def run(o, *args, **kwargs):
+    import webbrowser
+    webbrowser.open( f"https://www.google.com/search?q={args[0]}" )
+    return True
+    """
+
+    BING = """def run(o, *args, **kwargs):
+    import webbrowser
+    webbrowser.open( f"https://www.bing.com/search?q={args[0]}" )
+    return True
+    """
+    
+    UPDATE_TWITTER = """def run(o, *args, **kwargs):
+    import os
+    import subprocess
+    import sys
+    import time
+    import tweepy
+    from pypal import __version__
+    from pypal.config import Config
+    from pypal.twitter import *
+    from pypal.twitter.auth import *
+    
+    config = Config()
+    auth = tweepy.OAuthHandler(config.twitter.consumer_key, config.twitter.consumer_secret)
+    auth.set_access_token(config.twitter.access_token, config.twitter.access_token_secret)
+    api = tweepy.API(auth)
+
+    if not os.path.exists("./pypal/twitter/tweets.txt"):
+        with open("./pypal/twitter/tweets.txt", "w") as f:
+            f.write("")
+    
+    with open("./pypal/twitter/tweets.txt", "r") as f:
+        tweets = f.readlines()
+    
+    if args[0] in tweets:
+        print(f"{args[0]} already tweeted")
+        return True
+    
+    with open("./pypal/twitter/tweets.txt", "a") as f:
+        f.write(f"{args[0]}\n")
+    
+    api.update_status(f"{args[0]}")
+    print(f"Tweeted {args[0]}")
+    return True
+    """
+
+
     # copilot generated commands
     # ASSERT = """def run(o, *args, **kwargs):
     # if not args:
@@ -53,6 +101,7 @@ class DefaultCommands():
 
 
 class Utils():
+
     @staticmethod
     def y_n(x):
         """ returns a boolean for any given input """

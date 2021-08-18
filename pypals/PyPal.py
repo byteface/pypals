@@ -9,6 +9,7 @@ from rich import print
 from pypals.Program import Program
 
 from . import Utils
+from . import _meta
 
 class PyPal(object):
 
@@ -16,8 +17,8 @@ class PyPal(object):
         """
         data : {'name':'pypal'}
         """
-        with open(f"pypals/{data['name']}/_meta.json") as json_file:
-            self.o = json.load(json_file)['object']
+        _meta._meta.BAK = data
+        self.o = _meta._meta(f"pypals/{data['name']}/")
 
         self.history = []
         self.nlp = NLP(self)
@@ -64,7 +65,7 @@ class PyPal(object):
 
             # quit
             if information == 'q':
-                self.nlg.say("Goodbye")
+                self.nlg.say("Goodbye :wave:")
                 sys.exit()
 
             # list commands
@@ -72,7 +73,18 @@ class PyPal(object):
                 for cmd in os.listdir(f'pypals/{self.o["name"]}'):
                     print(cmd)
                 return
+
+            # list all config variables in this pypals config
+            if information == 'c':
+                for key in self.o.keys():
+                    print(key)
+                return
             
+            # convert the config file to a preffered format
+            if information.startswith('c='):
+                self.o.save_as(information.split('=')[1])
+                return
+
             # show stats
             if information == 'stats':
                 print(self.o['stats'])
