@@ -102,8 +102,11 @@ q - quit
 c - list all the variables in the config file
 
 c=json - change the config file to be json
+
 c=ini - change the config file to be ini
+
 c=xml - change the config file to be xml
+
 c=txt - change the config file to be txt
 
 
