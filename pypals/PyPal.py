@@ -8,7 +8,7 @@ from rich import print
 
 from pypals.Program import Program
 
-from . import Utils
+from . import Utils, DocsMixin
 from . import _meta
 
 class PyPal(object):
@@ -79,7 +79,12 @@ class PyPal(object):
                 for key in self.o.keys():
                     print(key)
                 return
-            
+
+            # generate docs
+            if information == 'd':
+                self.generate_docs_for_pypal()  # DocsMixin
+                return
+
             # convert the config file to a preffered format
             if information.startswith('c='):
                 self.o.save_as(information.split('=')[1])
@@ -101,6 +106,8 @@ class PyPal(object):
 
         self.nlp.processSentence(information)
         return
+
+    generate_docs_for_pypal = DocsMixin.generate_docs_for_pypal
 
     def create_command(self, command: str):        
         folders = command.split(" ")
@@ -134,6 +141,10 @@ class PyPal(object):
             with open(f'{filepath}/{cmd}', 'w') as f:
                 f.write(func)
 
+            # if docs exist, update
+            # if os.path.isfile(f'{filepath}/_docs.html'):
+            self.generate_docs_for_pypal()
+                
         except:
             print('failed to create folders!')
 

@@ -21,54 +21,6 @@ class DefaultCommands():
     sys.exit(0)
     """
 
-    GOOGLE = """def run(o, *args, **kwargs):
-    import webbrowser
-    webbrowser.open( f"https://www.google.com/search?q={args[0]}" )
-    return True
-    """
-
-    BING = """def run(o, *args, **kwargs):
-    import webbrowser
-    webbrowser.open( f"https://www.bing.com/search?q={args[0]}" )
-    return True
-    """
-    
-    UPDATE_TWITTER = """def run(o, *args, **kwargs):
-    import os
-    import subprocess
-    import sys
-    import time
-    import tweepy
-    from pypal import __version__
-    from pypal.config import Config
-    from pypal.twitter import *
-    from pypal.twitter.auth import *
-    
-    config = Config()
-    auth = tweepy.OAuthHandler(config.twitter.consumer_key, config.twitter.consumer_secret)
-    auth.set_access_token(config.twitter.access_token, config.twitter.access_token_secret)
-    api = tweepy.API(auth)
-
-    if not os.path.exists("./pypal/twitter/tweets.txt"):
-        with open("./pypal/twitter/tweets.txt", "w") as f:
-            f.write("")
-    
-    with open("./pypal/twitter/tweets.txt", "r") as f:
-        tweets = f.readlines()
-    
-    if args[0] in tweets:
-        print(f"{args[0]} already tweeted")
-        return True
-    
-    with open("./pypal/twitter/tweets.txt", "a") as f:
-        f.write(f"{args[0]}\n")
-    
-    api.update_status(f"{args[0]}")
-    print(f"Tweeted {args[0]}")
-    return True
-    """
-
-
     # copilot generated commands
     # ASSERT = """def run(o, *args, **kwargs):
     # if not args:
@@ -98,8 +50,6 @@ class DefaultCommands():
     # """
 
 
-
-
 class Utils():
 
     @staticmethod
@@ -122,3 +72,86 @@ class Utils():
                 return False
         else:
             raise ValueError(f"{x} is not a valid input")
+
+
+class DocsMixin():
+
+    def generate_docs_for_pypal(self):
+            self.nlg.say(f"generate_docs_for_pypal...")
+
+            import os
+            # full depth search on all directories to build a list of any .py files
+            # files = []
+            # for root, dirs, files in os.walk(f'pypals/{self.o["name"]}'):
+            #     for file in files:
+            #         if file.endswith('.py'):
+            #             files.append(os.path.join(root, file))
+            # use Pathlib to get the full path of all python files in all directories at full depth
+            from pathlib import Path
+            files = list(Path('pypals/{}'.format(self.o["name"])).glob('**/*.py'))
+            # print(files)
+
+            # create the docs
+            self.nlg.say(f"Creating docs...")
+            from domonic.html import html, head, body, div, h1, h2, p, a, button
+            from domonic.html import input as input_
+            page = html(head(),body(
+                h1('Hi, my name is ' + self.o['name']),
+                p(f"Here's a list of your current commands..."),
+                div(_id="docs")))
+            page.getElementById("docs").innerHTML = ""
+            for f in files:
+                # read the contents of the file
+                content = open(f, 'r').read()
+                # exract take the 2nd and 3rd lines from the file
+                content = content.split('\n')[1:3]
+                docs = page.getElementById("docs")
+                docs += div(
+                    h2(f),
+                    div(
+                        p(content,_id=f"{f}",),
+                        _id="output"
+                    )
+                #       button('run'),
+                #       button('delete')
+                    )
+            with open(f'pypals/{self.o["name"]}/_docs.html', 'w') as f:
+                f.write(str(page))
+            self.nlg.say(f"Docs created!")
+            return True
+
+
+    @staticmethod
+    def generate_docs_list_pypals():
+            print(f"generate_docs_list_pypals...")
+            # list the directories in only the pypals directory
+            import os
+            pypals = os.listdir('pypals')
+            # only show the directories
+            pypals = [x for x in pypals if os.path.isdir(f'pypals/{x}')]
+            # print(pypals)
+            # remove pycache
+            pypals = [x for x in pypals if not x.endswith('__pycache__')]
+
+
+            # create the docs
+            print(f"Creating docs...")
+            from domonic.html import html, head, body, div, h1, h2, p, a, button, code, sub, br
+            from domonic.html import input as input_
+            page = html(head(),body(
+                h1('This is a list of your current pypals:'),
+                div(_id="docs")))
+            page.getElementById("docs").innerHTML = ""
+            for pal in pypals:
+                docs = page.getElementById("docs")
+                docs += div(
+                    h2(pal),
+                    p( f"To talk to {pal} do :", br(), code(f"python3 -m pypals {pal}")),
+                    sub( '! Remember to start your virtual environment ;)'),
+                )
+            #page.getElementsByTagName('body').append(div(
+            #    div("", _id="feedback")
+            with open(f'pypals/_docs.html', 'w') as f:
+                f.write(str(page))
+            print(f"Docs created!")
+            return True

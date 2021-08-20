@@ -5,7 +5,7 @@ with open("README.md", "r") as f:
 
 setup(
     name="pypals",
-    version="1.0.3",
+    version="1.0.4",
     keywords = ['pypals'],
     author="@byteface",
     author_email="byteface@gmail.com",
@@ -13,7 +13,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/byteface/pypals",
-    download_url = 'https://github.com/byteface/pypals/archive/1.0.3.tar.gz',
+    download_url = 'https://github.com/byteface/pypals/archive/1.0.4.tar.gz',
     license="MIT",
     classifiers=[
         'Intended Audience :: Developers',
@@ -25,5 +25,5 @@ setup(
     packages=["pypals"],
     include_package_data = True,
     python_requires='>=3.7',
-    install_requires=['rich']
+    install_requires=['rich','domonic']
 )

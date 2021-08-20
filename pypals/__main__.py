@@ -11,7 +11,7 @@ from pathlib import Path
 from rich import print
 
 from .PyPal import PyPal
-from . import DefaultCommands, __version__, Utils
+from . import DefaultCommands, __version__, Utils, DocsMixin
 
 PYPALS_DIR = 'pypals' # TODO - pypal should also reference this value
 
@@ -22,12 +22,10 @@ def get_pypal_by_name(name: str, command: str=None):
             os.mkdir(PYPALS_DIR)
         except Exception as e:
             print(f'Failed to created {PYPALS_DIR} directory!', e)
-
     # returns the pypal or creates one if it doesn't exist
     pypal = f"{PYPALS_DIR}/{name}/"
     if name != "" and (os.path.exists(pypal) or os.path.islink(pypal)):
         pal = PyPal({'name': name})
-
         if command is None:
             pal.welcome()
         else:
@@ -87,6 +85,7 @@ def parse_args():
     parser.add_argument('-l', '--list', help="displays a list all your pypals", action='store_true')
     parser.add_argument('-h', '--help', action='store_true')  # shows help in the terminal
     parser.add_argument('-v', '--version', action='store_true')
+    parser.add_argument('-d', '--docs', help="generate a _docs file to list all your pypals", action='store_true')
 
     # args = parser.parse_args()
     args, name = parser.parse_known_args()
@@ -104,10 +103,14 @@ def do_things(arguments, name):
         print('-h, --help')
         print('-v, --version')
         print('-l, --list')
+        print('-d, --docs')
         return
     if arguments.version is True:
         print(__version__)
         return __version__
+    if arguments.docs is True:
+        DocsMixin.generate_docs_list_pypals()
+        return
 
     # runs if no arguments are passed
     command = None

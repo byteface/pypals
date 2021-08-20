@@ -91,7 +91,7 @@ You can store more variables in there if required just add them manually.
 
 ### shortcuts 
 
-When a pypal is running you can pass it the following commands as shortcuts:
+While a given pypal is running you can pass it the following single letter commands as shortcuts:
 
 r - re-run previous command. (i.e. after editing the python file)
 
@@ -108,6 +108,8 @@ c=ini - change the config file to be ini
 c=xml - change the config file to be xml
 
 c=txt - change the config file to be txt
+
+d - generate a docs file inside the given pypals folder that list out all the commands you have created. (once you create a docs file for a pypal, it will auto update every time you create a new command. so don't edit it manually or you will lose your changes.)
 
 
 ## CLI
@@ -128,6 +130,10 @@ show a list of all your pypals
 
 	$ python3 -m pypals -l 
 
+generate a top level docs file that lists out all your pypals in the root of the pypals folder.
+
+	$ python3 -m pypals -d
+
 
 ### API
 
@@ -145,6 +151,8 @@ TODO - explain API
 the base path to a command is available if loading writing files to same folder:
 
 o.context.COMMAND_PATH
+
+pypals uses includes rich and domonic libraries so your commands should be able to import and use them.
 
 
 ## more
